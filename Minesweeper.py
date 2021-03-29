@@ -5,10 +5,13 @@ import random
 def mineSweeper(field):
     field1=field
     counter=0
-    while counter!=8:
-        for i in field1:
+    n=-1
+    for i in field1:
+        n+=1
+        if counter !=8:
             if i =="*":
-                
+                field1[n]="M"
+                counter+=1
     
     return
 
@@ -25,5 +28,5 @@ field=["(y)"'\n'
 print("Welcome to Minesweeper!\nType 'Help' if you want instructions for this game!\nType 'Start' if you want to begin!")
 print(*field)
 answer=input("What do you want to do?\n: ")
-if answer = "start":
+if answer == "start":
     field=mineSweeper(field)
