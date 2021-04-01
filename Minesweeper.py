@@ -5,14 +5,11 @@ import random
 def mineSweeper(field):
     field1=field
     counter=0
-    n=-1
-    for i in field1:
-        n+=1
-        if counter !=8:
-            if i =="*":
-                field1[n]="M"
-                counter+=1
-    
+    while counter!=8:
+        x=random.randint(1,len(field1))
+        if field1[x] =="*":
+            field1[x]="M"
+            counter+=1
     return
 
 field=["(y)"'\n'
