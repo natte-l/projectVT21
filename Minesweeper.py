@@ -2,6 +2,18 @@
 
 import random
 
+def reveal(field,unlock):
+    S
+    return
+def unlock(coordinates,field1):
+    x=coordinates[0]
+    y=coordinates[1]
+    unlock=(x*y)-((y-1)*x)+1
+    if y < 8:
+        unlock=(((9-y)*(9))+(unlock))-(1*y+1)
+    field1[unlock]=reveal(field,unlock)
+    return s
+
 def mineSweeper(field):
     field1=field
     counter=0
@@ -27,3 +39,15 @@ print(*field)
 answer=input("What do you want to do?\n: ")
 if answer == "start":
     field=mineSweeper(field)
+    field1[unlock]=0
+    for k in range(9,12):
+        if field1[unlock+k]=="M":
+            field1[unlock]+=1
+        if field1[unlock+1]=="M":
+                field1[unlock]+=1
+        if field1[unlock-1]=="M":
+            field1[unlock]+=1
+    for k in range(9,12):
+        if field1[unlock-k]=="M":
+            field1[unlock]+=1
+    print(*field1)
