@@ -1,5 +1,6 @@
 #encoding=utf-8
 
+import os
 import random
 
 def revealFirstTime(field1,unlock,field):
@@ -7,7 +8,7 @@ def revealFirstTime(field1,unlock,field):
     if unlock>81 or unlock<0:
         return 
     if field1[unlock]!="*":
-        if field1[unlock]=="M":
+        if field1[unlock]=="M" and not (field[unlock]=="f" or field[unlock]=="F") :
             return "*"
         return field1[unlock]
     for k in range(8,11):
@@ -82,7 +83,7 @@ def reveal(field1,unlock,field,firstTimeCheck):
                         c=revealFirstTime(field1,a,field)
                         if c==0:
                             field[counter+k]="0"                
-                            field[counter+k]=c  #ÄNDRA ALLT DET HÄR TILL DET HÄR :)                    
+                            field[counter+k]=c                   
                 k=1
                 a=counter+k
                 if a<72 and a>0:
@@ -118,30 +119,27 @@ def unlock(coordinates,field1,field,firstTimeCheck):
 
 def answer1(field):
     coordinates="00000"
-    while len(coordinates)!=2 or coordinates[0]!="f" or coordinates[0]!="F":
-        coordinates=input("Type in the X and Y coordinates you want to unlock in the following format\n 'x,y', if you wanna mark a flag type "F" and then the coordinates.\n :")
+    while len(coordinates)!=3 and coordinates[0]!="f" and coordinates[0]!="F":
+        coordinates=input("Type in the X and Y coordinates you want to unlock in the following format\n 'x,y', if you wanna mark a flag type 'F' and then the coordinates.\n : ")
     while coordinates=="F" or coordinates=="f":
         coordinates=input("Type in the coordinates in the following format 'x,y' : ")
-        while len(coordinates)!=2:
-            coordinates=input("Make sure you are typing this format'x,y': ")
-        while not (coordinates[0].isdigit() and coordiantes[2].isdigit()):
-            coordinates=input("Make sure you are typing this format 'x,y': ")
-        if coordinates[0] == 0 or coordinates[2] == 0:
-            coordinates=input("No 0's are allowed. Please type again. 'x,y': ")
+        while len(coordinates)!=3 or not (coordinates[0].isdigit() and coordinates[2].isdigit()) or coordinates[0]=="0" or coordinates[0]=="9" or coordinates[2]=="0" or coordinates[2]=="9":
+            coordinates=input("Make sure you are typing in this format 'x,y': ")
         x=int(coordinates[0])
         y=int(coordinates[2])
         unlock=(x*y)-((y-1)*x)
         if y < 8:
             unlock=((8-y)*(9))+(unlock)
-        field[unlock]="F"
-        coordinates=input("Type in the X and Y coordinates you want to unlock in the following format\n 'x,y', if you wanna mark a flag type "F" and then the coordinates.\n :")
-        while len(coordinates)!=2 or coordinates[0]!="f" or coordinates[0]!="F":
-            coordinates=input("Type in the X and Y coordinates you want to unlock in the following format\n 'x,y', if you wanna mark a flag type "F" and then the coordinates.\n :")
-    if len(coordinates)==2:
-        coordinates=input("Type in the coordinates in the following format 'x,y' : ")
-        while len(coordinates) !=2:
-            coordinates=input("Make sure you are typing this format'x,y': ")
-        while not (coordinates[0].isdigit() and coordiantes[2].isdigit()):
+        if field[unlock]=="*":
+            field[unlock]="F"
+            print(*field)
+            print("\nCoordinate",coordinates,"flagged")
+        coordinates=input("Type in the X and Y coordinates you want to unlock in the following format\n 'x,y', if you wanna mark a flag type 'F' and then the coordinates.\n : ")
+        while len(coordinates)!=3 and coordinates[0]!="f" and coordinates[0]!="F":
+            coordinates=input("Type in the X and Y coordinates you want to unlock in the following format\n 'x,y', if you wanna mark a flag type 'F' and then the coordinates.\n : ")
+    
+    if len(coordinates)==3:
+        while not (coordinates[0].isdigit() and coordinates[2].isdigit()) or len(coordinates)!=3 or coordinates[0]=="0" or coordinates[0]=="9" or coordinates[2]=="0" or coordinates[2]=="9":
             coordinates=input("Make sure you are typing this format 'x,y': ")
         if coordinates[0] == 0 or coordinates[2] == 0:
             coordinates=input("No 0's are allowed. Please type again. 'x,y': ")
@@ -178,28 +176,30 @@ def mineSweeper():
     counter=0
     counter1=0
     firstTimeCheck=1
-    while counter!=8 or counter1!=0:
+    while counter!=8 and counter1!=0:
         for i in field:
             if i =="*":
                 counter1+=1
             if i =="F":
                 counter+=1
         answer=answer1(field)
-        field=unlock(coordinates,field1,field,firstTimeCheck)
+        field=unlock(answer,field1,field,firstTimeCheck)
         firstTimeCheck=0
         if field==-1:
             answer=input("You hit a bomb, wanna go again? (yes/no): ")
-            while answer!="yes" or answer!="Yes" or answer !="no" or answer!="No":
+            while answer!="yes" and answer!="Yes" and answer !="no" and answer!="No":
                 answer=input("(Input Error) You hit a bomb, wanna go again? (yes/no): ")
             return answer
-        print(*field,*field1)
+        print(*field)
     answer=1
     return answer
 
 
 print("Welcome to Minesweeper!\nType 'Help' if you want instructions for this game!\nType 'Start' if you want to begin!")
 answer=input("What do you want to do?\n: ")
-while answer == "start" or answer=="Start" or answer=="Start." or answer=="start.":
+while answer!="start" and answer!="Start" and answer!="Start." and answer!="start.":
+    answer=input("What do you want to do?\n: ")
+while answer=="start" or answer=="Start" or answer=="Start." or answer=="start.":
     answer=mineSweeper()
     while answer=="yes" or answer=="Yes" or answer=="yes." or answer=="Yes.":
         answer=mineSweeper()
